@@ -1,18 +1,21 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
+import {AddContactPage} from '../pages/add-contact/add-contact';
+import {DetailsContactPage} from '../pages/details-contact/details-contact';
 
 // Import the AF2 Module
 import { AngularFireModule } from 'angularfire2';
 import { FirebaseProvider } from '../providers/firebase/firebase';
 import {AngularFireAuth} from "angularfire2/auth";
 import {AngularFireDatabase} from "angularfire2/database";
-import { ContactComponent } from '../components/contact/contact';
+import {ContactComponent} from '../components/contact/contact';
+import { FilterPipe } from '../pipes/filter/filter';
 
 // AF2 Settings
 export const firebaseConfig = {
@@ -28,7 +31,10 @@ export const firebaseConfig = {
   declarations: [
     MyApp,
     HomePage,
-    ContactComponent
+    AddContactPage,
+    ContactComponent,
+    DetailsContactPage,
+    FilterPipe
   ],
   imports: [
     BrowserModule,
@@ -38,8 +44,10 @@ export const firebaseConfig = {
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    AddContactPage,
     HomePage,
-    ContactComponent
+    ContactComponent,
+    DetailsContactPage
   ],
   providers: [
     StatusBar,
