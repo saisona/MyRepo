@@ -46,7 +46,7 @@ export class ContactComponent {
   }
 
 
-  public set fp(value: FirebaseProvider) {
+  set fp(value: FirebaseProvider) {
     this._fp = value;
   }
 
@@ -81,14 +81,13 @@ export class ContactComponent {
    * @param {ContactComponent} c the Contact to update
    * @returns {Thenable<any>}
    */
-  public update(c : any) : Thenable<any> {
+  static update(c : any, firebase : FirebaseProvider) : Thenable<any> {
     let contact_to_update: object = {};
-    contact_to_update['name'] = c._name;
-    contact_to_update['fname'] = c._fname;
-    contact_to_update['address'] = c._address;
-    contact_to_update['notes'] = c._notes;
-    console.log(`contact_to_save => `, contact_to_update);
-    return c._fp.updateContact(c.$key,contact_to_update);
+    contact_to_update['name'] = c.name;
+    contact_to_update['fname'] = c.fname;
+    contact_to_update['address'] = c.address;
+    contact_to_update['notes'] = c.notes;
+    return firebase.updateContact(c.$key,contact_to_update);
   }
 
   get notes(): string {

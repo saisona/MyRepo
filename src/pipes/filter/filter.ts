@@ -14,7 +14,7 @@ export class FilterPipe implements PipeTransform {
 
   transform(value: any, term?: any, ...keys: any[]): any {
     if (term === undefined) return value;
-
+    console.log(value);
     return value.filter((item) => {
       let found = false;
       for (let i = 0; i < keys.length; i++) {

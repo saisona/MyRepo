@@ -3,12 +3,11 @@
  */
 
 export class Address {
-  private _city;
-  private _cp;
-  private _street;
+  private _city : string;
+  private _cp : string;
+  private _street : string;
 
-
-  constructor(city, cp, street) {
+  constructor(city : string, cp : string, street : string) {
     this._city = city;
     this._cp = cp;
     this._street = street;

@@ -18,7 +18,7 @@ export class DetailsContactPage {
   protected _user : ContactComponent;
 
   constructor(public viewCtrl : ViewController,params: NavParams) {
-    console.log(params.get('contact'))
+    console.log(params.get('contact'));
     this._user = params.get('contact');
   }
 

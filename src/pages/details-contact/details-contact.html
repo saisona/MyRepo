@@ -17,6 +17,27 @@
 
 
 <ion-content padding>
-  <p>Je sais pas quoi dire mais Details Contact MARCHE !!</p>
+  <ion-card>
+    <ion-card-header>
+      {{_user.name}} {{_user.fname}}
+    </ion-card-header>
 
+    <ion-list>
+      <ion-item>
+        <ion-icon name="map" item-start></ion-icon>
+        <p>Rue : {{_user.address._street}}</p>
+        <p>Ville : {{_user.address._city}}</p>
+        <p>CP : {{_user.address._cp}}</p>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon name="clipboard" item-start></ion-icon>
+        <p>
+          Notes : <br>
+          {{_user.notes}}
+        </p>
+      </ion-item>
+
+    </ion-list>
+  </ion-card>
 </ion-content>

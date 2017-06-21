@@ -2,21 +2,32 @@
   <ion-navbar>
     <ion-title>My Repo</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only (click)="addItem()"><ion-icon name="add"></ion-icon></button>
+      <button ion-button icon-only (click)="addItem()">
+        <ion-icon name="add"></ion-icon>
+      </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-    <ion-list no-lines>
-      <ion-item-sliding *ngFor="let c of contacts | async">
-        <ion-item (click)="selectItem(c)">
-         <h2>{{c.name}} {{c.fname}}</h2>
-        </ion-item>
-        <ion-item-options side="right">
-          <button ion-button color="info" (click)="updateItem(c)"><ion-icon name="hammer"></ion-icon>Modifier</button>
-          <button ion-button color="danger" (click)="deleteItem(c)"><ion-icon name="close"></ion-icon>Supprimer</button>
-        </ion-item-options>
-      </ion-item-sliding>
-    </ion-list>
+  <ion-searchbar [(ngModel)]="_searchValue"
+    [animated]="true" [placeholder]="'Search ...'" [autocomplete]="'on'" (ionInput)="onInput($event)">
+  </ion-searchbar>
+  <ion-list no-lines>
+    <ion-item-sliding *ngFor="let c of contacts | async ">
+      <ion-item (click)="selectItem(c)">
+        <h2>{{c.name}} {{c.fname}}</h2>
+      </ion-item>
+      <ion-item-options side="right">
+        <button ion-button color="info" (click)="updateItem(c)">
+          <ion-icon name="hammer"></ion-icon>
+          Modifier
+        </button>
+        <button ion-button color="danger" (click)="deleteItem(c)">
+          <ion-icon name="close"></ion-icon>
+          Supprimer
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
 </ion-content>
