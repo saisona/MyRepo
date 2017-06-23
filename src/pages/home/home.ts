@@ -19,6 +19,7 @@ export class HomePage {
   private initializedContacts : any[];
   protected _searchValue: string = "";
   protected gettingData: boolean;
+  protected isSync : boolean;
 
   private _searchControl: FormControl;
 
@@ -30,6 +31,7 @@ export class HomePage {
     });
     this._searchControl = new FormControl();
     this.gettingData = true;
+    this.isSync = false;
   }
 
   ionViewDidLoad() {
@@ -130,5 +132,16 @@ export class HomePage {
     );
     modal.present();
   }
-
+  public sync() {
+    this.isSync = true;
+    setTimeout(() => {
+      let toast = this.toastCtrl.create({
+        message: "Synchronisation is conplete !",
+        duration: 1500,
+      });
+      this.isSync = false
+      toast.present();
+    },3000);
+    // this.firebase.sync(this.initializedContacts).then(() => this.isSync = false);
+  }
 }

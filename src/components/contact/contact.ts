@@ -97,4 +97,8 @@ export class ContactComponent {
   static get_default(): ContactComponent {
     return new ContactComponent('', '', new Address('', '', ''), '', null);
   }
+
+  public equals(contact : ContactComponent) : boolean {
+    return this._name == contact._name && this._fname == contact._name && this._address.equals(contact._address) && this._notes == contact._notes;
+  }
 }

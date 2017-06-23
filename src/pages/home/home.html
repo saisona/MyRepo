@@ -2,6 +2,10 @@
   <ion-navbar>
     <ion-title>My Repo</ion-title>
     <ion-buttons end>
+      <button ion-button icon-only (click)="sync()">
+        <ion-icon *ngIf="!isSync" name="sync"></ion-icon>
+        <ion-spinner *ngIf="isSync"></ion-spinner>
+      </button>
       <button ion-button icon-only (click)="addItem()">
         <ion-icon name="add"></ion-icon>
       </button>

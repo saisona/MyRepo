@@ -37,4 +37,8 @@ export class Address {
   set street(value) {
     this._street = value;
   }
+
+  public equals(address : Address) {
+    return this._city == address._city && this._cp == address._cp && this._street == address._street;
+  }
 }
