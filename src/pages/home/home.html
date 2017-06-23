@@ -9,23 +9,26 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
   <ion-searchbar [(ngModel)]="_searchValue"
-    [animated]="true" [placeholder]="'Search ...'" [autocomplete]="'on'" (ionInput)="onInput($event)">
+                 [animated]="true" [placeholder]="'Search ...'" [autocomplete]="'on'" [formControl]="_searchControl"
+                 (ionInput)="setFilteredItems()">
   </ion-searchbar>
+  <div *ngIf="gettingData" class="spinner-container">
+    <ion-spinner></ion-spinner>
+
+  </div>
   <ion-list no-lines>
-    <ion-item-sliding *ngFor="let c of contacts | async ">
+    <ion-item-sliding *ngFor="let c of contacts ">
       <ion-item (click)="selectItem(c)">
         <h2>{{c.name}} {{c.fname}}</h2>
       </ion-item>
       <ion-item-options side="right">
-        <button ion-button color="info" (click)="updateItem(c)">
+        <button ion-button icon-only="" color="info" (click)="updateItem(c)">
           <ion-icon name="hammer"></ion-icon>
-          Modifier
         </button>
-        <button ion-button color="danger" (click)="deleteItem(c)">
-          <ion-icon name="close"></ion-icon>
-          Supprimer
+        <button ion-button icon-only color="danger" (click)="deleteItem(c)">
+          <ion-icon name="trash"></ion-icon>
         </button>
       </ion-item-options>
     </ion-item-sliding>

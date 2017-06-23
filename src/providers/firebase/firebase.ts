@@ -21,16 +21,20 @@ export class FirebaseProvider {
     return this.angDatabase.list('contacts').push(c);
   }
 
-  public getContacts() : FirebaseListObservable<any> {
-    return this.angDatabase.list('contacts');
+  public getContacts(): FirebaseListObservable<any> {
+    return this.angDatabase.list('contacts', {
+      query: {
+        orderByChild: 'name'
+      }
+    });
   }
 
-  public deleteContact(id : object) : Thenable<any> {
-    return this.angDatabase.object('contacts/'+id).remove();
+  public deleteContact(id: object): Thenable<any> {
+    return this.angDatabase.object('contacts/' + id).remove();
   }
 
-  public updateContact(id : string, contact : object) : Thenable<any> {
-    return this.angDatabase.object('contacts/'+id).update(contact);
+  public updateContact(id: string, contact: object): Thenable<any> {
+    return this.angDatabase.object('contacts/' + id).update(contact);
   }
 
 }

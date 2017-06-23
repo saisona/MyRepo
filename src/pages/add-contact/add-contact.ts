@@ -45,6 +45,7 @@ export class AddContactPage {
   }
 
   public update() : void{
+    console.log(this._user);
     this.viewCtrl.dismiss(this._user);
   }
 }

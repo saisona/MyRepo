@@ -4,7 +4,10 @@ import {FirebaseProvider} from "../../providers/firebase/firebase";
 import {ContactComponent} from '../../components/contact/contact';
 import {AddContactPage} from "../add-contact/add-contact";
 import {DetailsContactPage} from '../details-contact/details-contact';
-// import {FirebaseListObservable} from "angularfire2/database";
+import {FormControl} from "@angular/forms";
+import "rxjs/add/operator/debounceTime";
+import 'rxjs/add/operator/map';
+
 
 @Component({
   selector: 'page-home',
@@ -12,23 +15,46 @@ import {DetailsContactPage} from '../details-contact/details-contact';
 })
 export class HomePage {
 
-  // protected contacts: FirebaseListObservable<any>;
-  protected contacts: any;
+  protected contacts: any[];
+  private initializedContacts : any[];
   protected _searchValue: string = "";
+  protected gettingData: boolean;
 
-  private initilizedContact: any[] = [];
+  private _searchControl: FormControl;
 
   constructor(public firebase: FirebaseProvider, public modalCtrl: ModalController, public toastCtrl: ToastController) {
-    this.contacts = this.firebase.getContacts();
-    this.firebase.getContacts().subscribe(res => {
-      this.initilizedContact = res;
-      console.log(this.initilizedContact);
-    })
+    this.firebase.getContacts().subscribe((contacts) => {
+      this.contacts = contacts.sort();
+      this.initializedContacts = contacts.sort();
+      this.gettingData = false;
+    });
+    this._searchControl = new FormControl();
+    this.gettingData = true;
+  }
+
+  ionViewDidLoad() {
+    this._searchControl.valueChanges.debounceTime(700).subscribe(() => {
+      this.setFilteredItems();
+    });
+  }
+
+  public setFilteredItems() {
+    this.contacts = (this.filterItems(this._searchValue));
+  }
+
+  private filterItems(searchTerm) {
+    console.log(searchTerm)
+    if (searchTerm == "")
+      return this.initializedContacts;
+    else
+      return this.initializedContacts.filter((item) => {
+        console.log(`ITEM => `, item);
+        return item.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1 || item.fname.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
+      });
   }
 
 
   public selectItem(c: ContactComponent): void {
-    //TODO : HANDLE CHANGE VIEW !
     let modal = this.modalCtrl.create(DetailsContactPage, {contact: c});
     modal.present();
   }
@@ -77,40 +103,32 @@ export class HomePage {
         name: c.name,
         fname: c.fname,
         address: {city: c.address._city, cp: c.address._cp, street: c.address._street},
-        $key : c.$key,
+        $key: c.$key,
         notes: c.notes
       },
       add: false
     };
     console.log(c_update);
-    let modal = this.modalCtrl.create(AddContactPage,c_update);
+    let modal = this.modalCtrl.create(AddContactPage, c_update);
     modal.onDidDismiss((contact: ContactComponent) => {
-      if (contact != null) {
-        console.log("You tried to update !");
-        {
-        }
-        ContactComponent.update(contact, this.firebase).then(() => {
-          let toast = this.toastCtrl.create({
-            message: "Le contact a été modifié",
-            duration: 1500,
-            showCloseButton: true,
-            closeButtonText: 'Ok'
+        if (contact != null) {
+          console.log("You tried to update !");
+          ContactComponent.update(contact, this.firebase).then(() => {
+            let toast = this.toastCtrl.create({
+              message: "Le contact a été modifié",
+              duration: 1500,
+              showCloseButton: true,
+              closeButtonText: 'Ok'
+            });
+            toast.present();
+          }).catch(err => {
+            console.log(err);
+            alert("There was an ERROR !");
           });
-          toast.present();
-        }).catch(err => {
-          console.log(err);
-          alert("There was an ERROR !");
-        });
-      } else
-        console.log("You have cancelled the update !");
-    });
+        }
+      }
+    );
     modal.present();
   }
 
-  public onInput(event) {
-    this._searchValue = event.target.value;
-    this.initilizedContact.forEach(function (value, index) {
-      console.log(`INIT VAL => `, index, value)
-    })
-  }
 }

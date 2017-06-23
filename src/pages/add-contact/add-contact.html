@@ -16,7 +16,7 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
   <ion-list>
 
     <ion-item>
@@ -51,7 +51,7 @@
 
   </ion-list>
 
-  <button *ngIf="_add == true" ion-button (click)="add()">Ajouter</button>
-  <button *ngIf="_add == false" ion-button (click)="update()">Modifier</button>
-  <button ion-button (click)="close()">Annuler</button>
+  <button *ngIf="_add == true" ion-button (click)="add()" color="light">Ajouter</button>
+  <button *ngIf="_add == false" ion-button (click)="update()" color="primary">Modifier</button>
+  <button ion-button (click)="close()" color="danger" >Annuler</button>
 </ion-content>
