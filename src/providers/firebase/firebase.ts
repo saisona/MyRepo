@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import 'rxjs/add/operator/map';
 import {AngularFireDatabase, FirebaseListObservable} from "angularfire2/database";
 import {Thenable} from "firebase/app";
-import {ContactComponent} from "../../components/contact/contact";
 
 /*
  Generated class for the FirebaseProvider provider.
@@ -30,23 +29,17 @@ export class FirebaseProvider {
     });
   }
 
-  public sync(old:any[]) : Promise<any> {
-    return new Promise((resolve,reject) => {
-      this.getContacts().subscribe((f_contacts : ContactComponent[]) => {
-        let index_sync = 0;
-        old.forEach((l_contact : ContactComponent) => {
-          f_contacts.forEach((f_contact : ContactComponent) => {
-            if(!l_contact.equals(f_contact)) {
-
-            }else {
-              //Nothing to do
-              console.log("% is equals to % ",l_contact,f_contact);
-            }
-            index_sync++;
-          });
-          // if(index_sync)
-        })
-      })
+  public sync(local:any[]) : Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.angDatabase.list('contacts').remove().then(res => {
+        console.log(`Res_Sync => `, res);
+        local.forEach(item => {
+          delete item.$key;
+          delete item._fp;
+          this.addContact(item);
+        });
+        resolve(true);
+      }).catch(err => reject(err));
     })
   }
 

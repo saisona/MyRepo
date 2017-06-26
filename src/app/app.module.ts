@@ -17,6 +17,7 @@ import {AngularFireAuth} from "angularfire2/auth";
 import {AngularFireDatabase} from "angularfire2/database";
 import {ContactComponent} from '../components/contact/contact';
 import { FilterPipe } from '../pipes/filter/filter';
+import { LocalStorageProvider } from '../providers/local-storage/local-storage';
 
 // AF2 Settings
 export const firebaseConfig = {
@@ -57,7 +58,8 @@ export const firebaseConfig = {
     AngularFireDatabase,
     SplashScreen,
     FirebaseProvider,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    LocalStorageProvider
   ]
 })
 export class AppModule {}
