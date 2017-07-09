@@ -26,7 +26,7 @@
     <ion-item *ngIf="!contacts || contacts.length < 1">There is no DATA here !</ion-item>
     <ion-item-sliding *ngFor="let c of contacts ">
       <ion-item (click)="selectItem(c)">
-        <h2>{{c.name}} {{c.fname}}</h2>
+        <h2>{{c._name}} {{c._fname}}</h2>
       </ion-item>
       <ion-item-options side="right">
         <button ion-button icon-only="" color="info" (click)="updateItem(c)">

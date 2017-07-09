@@ -5,15 +5,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
 
-// AF2 Settings
-export const firebaseConfig = {
-  apiKey: "AIzaSyDnAX0CQbbsMYuOTJ66ox_F0GwzPM4XPXY",
-  authDomain: "angularfire2-list-example.firebaseapp.com",
-  databaseURL: "https://angularfire2-list-example.firebaseio.com",
-  storageBucket: "",
-  messagingSenderId: "609067141823"
-};
-
 @Component({
   templateUrl: 'app.html'
 })

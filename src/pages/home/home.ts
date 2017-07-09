@@ -28,9 +28,9 @@ export class HomePage {
 
   constructor(public firebase: FirebaseProvider, public modalCtrl: ModalController, public toastCtrl: ToastController, private platform: Platform, protected storageIonic: Storage) {
     this.storageIonic.ready().then(storage => {
-      storage.getItem('contacts').then((vls : any[]) => {
+      storage.getItem('contacts').then((vls : ContactComponent[]) => {
+        console.log("ENTER constructor =>",vls);
         this.contacts = vls;
-        console.log(vls);
       });
     });
     this._searchControl = new FormControl();
@@ -69,15 +69,38 @@ export class HomePage {
 
   deleteItem(c: any) {
     let contact = {name: c.name, fname: c.fname};
-    this.firebase.deleteContact(c.$key).then(() => {
-      let toast = this.toastCtrl.create({
-        message: contact.name + " " + contact.fname + " a été supprimé !",
-        duration: 1500,
-        showCloseButton: true,
-        closeButtonText: 'Ok'
-      });
-      toast.present();
+    this.checkNetwork().then(connected => {
+      if(connected) {
+        this.firebase.deleteContact(c.$key).then(() => {
+          let toast = this.toastCtrl.create({
+            message: contact.name + " " + contact.fname + " a été supprimé !",
+            duration: 1500,
+            showCloseButton: true,
+            closeButtonText: 'Ok'
+          });
+          toast.present();
+        })    
+      }
+      else {
+        // this.storageIonic.ready().then(storage => {
+        //   storage.getItem('contacts').then((contacts : ContactComponent[]) => {
+        //     if(contacts === null) {
+        //       contacts = [];
+        //     }
+        //     contacts.push(contact);
+
+        //     console.log(`Contacts => `,contacts);
+        //     console.log(`Contact from onDidDismiss => `, contact);
+        //     console.log(`ADDED THE NEW CONTACTS => `, contacts);
+        //     storage.setItem('contacts', contacts);
+        //     this.contacts = contacts;
+        //     this.initializedContacts = contacts;
+        //   })
+        // });
+        console.log("ENTER ELSE DELETE ITEM")
+      }
     })
+    
   }
 
 
@@ -101,8 +124,14 @@ export class HomePage {
         //   alert("There was an ERROR !");
         // });
         this.storageIonic.ready().then(storage => {
-          storage.getItem('contacts').then((contacts : any[]) => {
+          storage.getItem('contacts').then((contacts : ContactComponent[]) => {
+            if(contacts === null) {
+              contacts = [];
+            }
             contacts.push(contact);
+
+            console.log(`Contacts => `,contacts);
+            console.log(`Contact from onDidDismiss => `, contact);
             console.log(`ADDED THE NEW CONTACTS => `, contacts);
             storage.setItem('contacts', contacts);
             this.contacts = contacts;
