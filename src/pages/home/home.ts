@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import { ModalController, Platform, ToastController} from 'ionic-angular';
+import { ModalController, Platform, ToastController,AlertController} from 'ionic-angular';
 import {FirebaseProvider} from "../../providers/firebase/firebase";
 import {ContactComponent} from '../../components/contact/contact';
 import {AddContactPage} from "../add-contact/add-contact";
@@ -26,7 +26,7 @@ export class HomePage {
 
   private _searchControl: FormControl;
 
-  constructor(public firebase: FirebaseProvider, public modalCtrl: ModalController, public toastCtrl: ToastController, private platform: Platform, protected storageIonic: Storage) {
+  constructor(public firebase: FirebaseProvider, public modalCtrl: ModalController, public toastCtrl: ToastController, public alertCtrl:AlertController, private platform: Platform, protected storageIonic: Storage) {
     this.gettingData = true;
     this.storageIonic.ready().then(storage => {
       storage.getItem('contacts').then((vls : any[]) => {
@@ -213,28 +213,49 @@ export class HomePage {
 
 
   sync() {
-    this.isSync = true;
-    this.checkNetwork().then(isConnected => {
-      let toast;
-      if (isConnected) {
-        this.firebase.sync(this.initializedContacts).then(() => {
-          toast = this.toastCtrl.create({
-            message: "Synchronisation is conplete !",
-            duration: 1500,
-          });
-          toast.present();
-          this.isSync = false;
-        });
-      } else {
-        toast = this.toastCtrl.create({
-          message: "Vous devez être connecté pour synchroniser !",
-          duration: 1500,
-        });
-        this.isSync = false;
-        toast.present();
-      }
-
+    let alert = this.alertCtrl.create({
+      title: 'Synchronisation',
+      message: 'Quel mode de Synchronisation ?',
+      buttons: [
+        {
+          text: 'Depuis Internet',
+          handler: () => {
+            this.firebase.getContacts().subscribe(contacts => {
+              this.contacts = contacts;
+              this.initializedContacts = contacts;
+              console.log(contacts);
+            })
+          }
+        },
+        {
+          text: 'Vers Internet',
+          handler: () => {
+            this.isSync = true;
+            this.checkNetwork().then(isConnected => {
+              let toast;
+              if (isConnected) {
+                this.firebase.sync(this.initializedContacts).then(() => {
+                  toast = this.toastCtrl.create({
+                    message: "Synchronisation is conplete !",
+                    duration: 1500,
+                  });
+                  toast.present();
+                  this.isSync = false;
+                });
+              } else {
+                toast = this.toastCtrl.create({
+                  message: "Vous devez être connecté pour synchroniser !",
+                  duration: 1500,
+                });
+                this.isSync = false;
+                toast.present();
+              }
+            });
+          }
+        }
+      ]
     });
+    alert.present();
   }
 
   /**
