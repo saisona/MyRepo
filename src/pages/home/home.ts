@@ -27,6 +27,7 @@ export class HomePage {
   private _searchControl: FormControl;
 
   constructor(public firebase: FirebaseProvider, public modalCtrl: ModalController, public toastCtrl: ToastController, private platform: Platform, protected storageIonic: Storage) {
+    this.gettingData = true;
     this.storageIonic.ready().then(storage => {
       storage.getItem('contacts').then((vls : any[]) => {
         console.log("ENTER constructor =>",vls);
@@ -34,10 +35,10 @@ export class HomePage {
           this.contacts = vls.sort(this.sort_function);
         else
           this.contacts = [];
+        this.gettingData = false;
       });
     });
     this._searchControl = new FormControl();
-    this.gettingData = false;
     this.isSync = false;
   }
 
@@ -53,8 +54,7 @@ export class HomePage {
     this.contacts = (this.filterItems(this._searchValue));
   }
 
-  private
-  filterItems(searchTerm) {
+  private filterItems(searchTerm) {
     if (searchTerm == "")
       return this.initializedContacts;
     else
@@ -71,7 +71,6 @@ export class HomePage {
 
 
   deleteItem(c: ContactComponent) {
-    console.log(c);
     // this.checkNetwork().then(connected => {
     //   if(connected) {
     //     this.firebase.deleteContact(c.$key).then(() => {
@@ -99,8 +98,10 @@ export class HomePage {
             }
             if(index_to_delete !== -1)
               contacts.splice(index_to_delete,1);
-            else
+            else {
+              alert("[ERROR] cannot find the index of the contact to delete !");
               console.log("CANNOT FIND THE CONTACT TO DELETE")
+            }
 
             storage.setItem('contacts', contacts);
             this.contacts = contacts;
@@ -156,34 +157,51 @@ export class HomePage {
   updateItem(c: any) {
     let c_update = {
       contact: {
-        name: c.name,
-        fname: c.fname,
+        name: c._name,
+        fname: c._fname,
         address: {city: c._address._city, cp: c._address._cp, street: c._address._street},
         $key: c.$key || null,
-        notes: c.notes
+        notes: c._notes
       },
       add: false
     };
     console.log(c_update);
+    let index_found_contact_in_list = this.findContact(this.contacts,c_update.contact);
+    console.log(`INDEX => ${index_found_contact_in_list}`);
     let modal = this.modalCtrl.create(AddContactPage, c_update);
-    modal.onDidDismiss((contact: ContactComponent) => {
-        if (contact != null) {
-          console.log("You tried to update !");
-          ContactComponent.update(contact, this.firebase).then(() => {
-            let toast = this.toastCtrl.create({
-              message: "Le contact a été modifié",
-              duration: 1500,
-              showCloseButton: true,
-              closeButtonText: 'Ok'
+    modal.onDidDismiss((contact: any) => {
+          this.storageIonic.ready().then(storage => {
+              storage.getItem('contacts').then((contacts : ContactComponent[]) => {
+                  contact = {
+                    _name: contact.name,
+                    _fname: contact.fname,
+                    _address: {city: contact.address.city, cp: contact.address.cp, street: contact.address.street},
+                    $key: contact.$key || null,
+                    _notes: contact.notes
+                  };
+                if(index_found_contact_in_list !== -1)
+                  contacts[index_found_contact_in_list] = contact;
+                else
+                  console.log("Index to update is not defined => CONTACT NOT FOUND !");
+                contacts.sort(this.sort_function);
+                storage.setItem('contacts', contacts);
+                this.contacts = contacts;
+                this.initializedContacts = contacts;
             });
-            toast.present();
-          }).catch(err => {
-            console.log(err);
-            alert("There was an ERROR !");
           });
-        }
-      }
-    );
+    });
+              // ContactComponent.update(contact, this.firebase).then(() => {
+          //   let toast = this.toastCtrl.create({
+          //     message: "Le contact a été modifié",
+          //     duration: 1500,
+          //     showCloseButton: true,
+          //     closeButtonText: 'Ok'
+          //   });
+          //   toast.present();
+          // }).catch(err => {
+          //   console.log(err);
+          //   alert("There was an ERROR !");
+          // });
     modal.present();
   }
 
@@ -248,6 +266,23 @@ export class HomePage {
   }
 
   private equals(c1 : any,c2 : any) : boolean {
+    console.log(c1._name, c2._name );
+    console.log(c1._fname,c2._fname);
     return c1._name == c2._name && c1._fname == c2._fname;
   }
+
+  private findContact(list : any[],contact : any) {
+    let found : boolean = false;
+    let i : number = 0;
+    let found_index : number = -1;
+    contact = {_name : contact.name,_fname : contact.fname};
+    while(i < list.length && !found) {
+      if(this.equals(contact,list[i])) {
+        found_index = i;
+        found = true;
+      }
+      i++;
+    }
+    return found ? found_index : -1;
+  } 
 }
