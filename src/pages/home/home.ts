@@ -175,7 +175,7 @@ export class HomePage {
                   contact = {
                     _name: contact.name,
                     _fname: contact.fname,
-                    _address: {city: contact.address.city, cp: contact.address.cp, street: contact.address.street},
+                    _address: {_city: contact.address.city, _cp: contact.address.cp, _street: contact.address.street},
                     $key: contact.$key || null,
                     _notes: contact.notes
                   };
