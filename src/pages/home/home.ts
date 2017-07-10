@@ -70,10 +70,8 @@ export class HomePage {
   }
 
 
-  deleteItem(c: any) {
-    let contact = {name: c.name, fname: c.fname};
+  deleteItem(c: ContactComponent) {
     console.log(c);
-    console.log(contact);
     // this.checkNetwork().then(connected => {
     //   if(connected) {
     //     this.firebase.deleteContact(c.$key).then(() => {
@@ -89,20 +87,26 @@ export class HomePage {
     //   else {
         this.storageIonic.ready().then(storage => {
           storage.getItem('contacts').then((contacts : any[]) => {
-            if(contacts === null) {
-              contacts = [];
+            let index_to_delete = -1;
+            console.log("ENTER FINDING TO DELETE !", contacts);
+            for(let index=0; index < contacts.length; index++) {
+                console.log(c,contacts[index]);
+                if(this.equals(contacts[index],c)) {
+                  console.log("ENTER FOUND !");
+                  index_to_delete = index;
+                  break;
+                }
             }
-            contacts.push(contact);
+            if(index_to_delete !== -1)
+              contacts.splice(index_to_delete,1);
+            else
+              console.log("CANNOT FIND THE CONTACT TO DELETE")
 
-            console.log(`Contacts => `,contacts);
-            console.log(`Contact from onDidDismiss => `, contact);
-            console.log(`ADDED THE NEW CONTACTS => `, contacts);
             storage.setItem('contacts', contacts);
             this.contacts = contacts;
             this.initializedContacts = contacts;
           })
         });
-        console.log("ENTER ELSE DELETE ITEM")
       // }
     // })
     
@@ -241,5 +245,9 @@ export class HomePage {
       else
         return 0;  
     }
+  }
+
+  private equals(c1 : any,c2 : any) : boolean {
+    return c1._name == c2._name && c1._fname == c2._fname;
   }
 }
