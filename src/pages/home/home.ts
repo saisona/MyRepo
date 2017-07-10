@@ -19,7 +19,7 @@ declare const Connection: any;
 export class HomePage {
 
   protected contacts: any[];
-  private initializedContacts: ContactComponent[];
+  private initializedContacts: any[];
   protected _searchValue: string = "";
   protected gettingData: boolean;
   protected isSync: boolean;
@@ -31,10 +31,15 @@ export class HomePage {
     this.storageIonic.ready().then(storage => {
       storage.getItem('contacts').then((vls : any[]) => {
         console.log("ENTER constructor =>",vls);
-        if(vls !== null && vls !== undefined )
-          this.contacts = vls.sort(this.sort_function);
-        else
+        if(vls !== null && vls !== undefined ) {
+          vls.sort(this.sort_function);
+          this.contacts = vls;
+          this.initializedContacts = vls;
+        }
+        else{
+          this.initializedContacts = [];
           this.contacts = [];
+        }
         this.gettingData = false;
       });
     });
@@ -58,8 +63,9 @@ export class HomePage {
     if (searchTerm == "")
       return this.initializedContacts;
     else
-      return this.initializedContacts.filter((item) => {
-        return item.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1 || item.fname.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
+      return this.initializedContacts.filter((item : any) => {
+        console.log(item);
+        return item._name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1 || item._fname.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
       });
   }
 
