@@ -220,10 +220,16 @@ export class HomePage {
         {
           text: 'Depuis Internet',
           handler: () => {
+            this.isSync = true;
             this.firebase.getContacts().subscribe(contacts => {
               this.contacts = contacts;
               this.initializedContacts = contacts;
-              console.log(contacts);
+              this.isSync = false;
+              let toast = this.toastCtrl.create({
+                message: "Synchronisation terminée !",
+                duration: 1500,
+              });
+              toast.present();
             })
           }
         },
@@ -236,7 +242,7 @@ export class HomePage {
               if (isConnected) {
                 this.firebase.sync(this.initializedContacts).then(() => {
                   toast = this.toastCtrl.create({
-                    message: "Synchronisation is conplete !",
+                    message: "Synchronisation terminée !",
                     duration: 1500,
                   });
                   toast.present();
