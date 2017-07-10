@@ -68,10 +68,10 @@ export class ContactComponent {
    */
   public save(): Thenable<any> {
     let contact_to_save: object = {};
-    contact_to_save['name'] = this._name;
-    contact_to_save['fname'] = this._fname;
-    contact_to_save['address'] = this._address;
-    contact_to_save['notes'] = this._notes;
+    contact_to_save['_name'] = this._name;
+    contact_to_save['_fname'] = this._fname;
+    contact_to_save['_address'] = this._address;
+    contact_to_save['_notes'] = this._notes;
     console.log(`contact_to_save => `, contact_to_save);
     return this._fp.addContact(contact_to_save)
   }
@@ -83,10 +83,10 @@ export class ContactComponent {
    */
   static update(c : any, firebase : FirebaseProvider) : Thenable<any> {
     let contact_to_update: object = {};
-    contact_to_update['name'] = c.name;
-    contact_to_update['fname'] = c.fname;
-    contact_to_update['address'] = c.address;
-    contact_to_update['notes'] = c.notes;
+    contact_to_update['_name'] = c._name;
+    contact_to_update['_fname'] = c._fname;
+    contact_to_update['_address'] = c._address;
+    contact_to_update['_notes'] = c._notes;
     return firebase.updateContact(c.$key,contact_to_update);
   }
 
