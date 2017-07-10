@@ -28,9 +28,12 @@ export class HomePage {
 
   constructor(public firebase: FirebaseProvider, public modalCtrl: ModalController, public toastCtrl: ToastController, private platform: Platform, protected storageIonic: Storage) {
     this.storageIonic.ready().then(storage => {
-      storage.getItem('contacts').then((vls : ContactComponent[]) => {
+      storage.getItem('contacts').then((vls : any[]) => {
         console.log("ENTER constructor =>",vls);
-        this.contacts = vls;
+        if(vls !== null && vls !== undefined )
+          this.contacts = vls.sort(this.sort_function);
+        else
+          this.contacts = [];
       });
     });
     this._searchControl = new FormControl();
@@ -69,37 +72,39 @@ export class HomePage {
 
   deleteItem(c: any) {
     let contact = {name: c.name, fname: c.fname};
-    this.checkNetwork().then(connected => {
-      if(connected) {
-        this.firebase.deleteContact(c.$key).then(() => {
-          let toast = this.toastCtrl.create({
-            message: contact.name + " " + contact.fname + " a été supprimé !",
-            duration: 1500,
-            showCloseButton: true,
-            closeButtonText: 'Ok'
-          });
-          toast.present();
-        })    
-      }
-      else {
-        // this.storageIonic.ready().then(storage => {
-        //   storage.getItem('contacts').then((contacts : ContactComponent[]) => {
-        //     if(contacts === null) {
-        //       contacts = [];
-        //     }
-        //     contacts.push(contact);
+    console.log(c);
+    console.log(contact);
+    // this.checkNetwork().then(connected => {
+    //   if(connected) {
+    //     this.firebase.deleteContact(c.$key).then(() => {
+    //       let toast = this.toastCtrl.create({
+    //         message: contact.name + " " + contact.fname + " a été supprimé !",
+    //         duration: 1500,
+    //         showCloseButton: true,
+    //         closeButtonText: 'Ok'
+    //       });
+    //       toast.present();
+    //     })    
+    //   }
+    //   else {
+        this.storageIonic.ready().then(storage => {
+          storage.getItem('contacts').then((contacts : any[]) => {
+            if(contacts === null) {
+              contacts = [];
+            }
+            contacts.push(contact);
 
-        //     console.log(`Contacts => `,contacts);
-        //     console.log(`Contact from onDidDismiss => `, contact);
-        //     console.log(`ADDED THE NEW CONTACTS => `, contacts);
-        //     storage.setItem('contacts', contacts);
-        //     this.contacts = contacts;
-        //     this.initializedContacts = contacts;
-        //   })
-        // });
+            console.log(`Contacts => `,contacts);
+            console.log(`Contact from onDidDismiss => `, contact);
+            console.log(`ADDED THE NEW CONTACTS => `, contacts);
+            storage.setItem('contacts', contacts);
+            this.contacts = contacts;
+            this.initializedContacts = contacts;
+          })
+        });
         console.log("ENTER ELSE DELETE ITEM")
-      }
-    })
+      // }
+    // })
     
   }
 
@@ -129,16 +134,13 @@ export class HomePage {
               contacts = [];
             }
             contacts.push(contact);
+            contacts.sort(this.sort_function);
 
-            console.log(`Contacts => `,contacts);
-            console.log(`Contact from onDidDismiss => `, contact);
-            console.log(`ADDED THE NEW CONTACTS => `, contacts);
             storage.setItem('contacts', contacts);
             this.contacts = contacts;
             this.initializedContacts = contacts;
           })
         });
-        // this.sto.addValue(contact).then(isOk => console.log(`FROM Home.ts => `, isOk));
       }
       else
         console.log("You have cancelled the action ! OR CLOSED ");
@@ -152,8 +154,8 @@ export class HomePage {
       contact: {
         name: c.name,
         fname: c.fname,
-        address: {city: c.address._city, cp: c.address._cp, street: c.address._street},
-        $key: c.$key,
+        address: {city: c._address._city, cp: c._address._cp, street: c._address._street},
+        $key: c.$key || null,
         notes: c.notes
       },
       add: false
@@ -228,5 +230,16 @@ export class HomePage {
         resolve(networkState !== Connection.NONE && networkState !== Connection.CELL);
       });
     });
+  }
+
+  private sort_function(c1,c2) {
+    if(c1 !== null && c2 !== null)
+      return c1._name.localeCompare(c2._name);
+    else {
+      if(c1 !== null && c2 == null)
+        return -1;
+      else
+        return 0;  
+    }
   }
 }

@@ -32,7 +32,6 @@ export class FirebaseProvider {
   public sync(local:any[]) : Promise<any> {
     return new Promise((resolve, reject) => {
       this.angDatabase.list('contacts').remove().then(res => {
-        console.log(`Res_Sync => `, res);
         local.forEach(item => {
           delete item.$key;
           delete item._fp;
