@@ -217,7 +217,7 @@ export class HomePage {
       message: 'Quel mode de Synchronisation ?',
       buttons: [
         {
-          text: 'Depuis Internet',
+          text: 'Mettre a jour via Internet',
           handler: () => {
             this.isSync = true;
             this.firebase.getContacts().subscribe(contacts => {
@@ -237,13 +237,34 @@ export class HomePage {
             });
           }
         },
+         {
+          text: 'Reboot par Internet',
+          handler: () => {
+            this.isSync = true;
+            this.firebase.getContacts().subscribe(contacts => {
+              this.contacts = contacts;
+              this.initializedContacts = contacts;
+              this.contacts.sort(this.sort_function);
+              this.initializedContacts.sort(this.sort_function);
+              let toast = this.toastCtrl.create({
+                  message: "Synchronisation terminée !",
+                  duration: 1500,
+              });
+              this.storageIonic.ready().then(storage => {
+                storage.setItem('contacts', this.initializedContacts);
+                toast.present();
+                this.isSync = false;
+              })
+            });
+          }
+        },
         {
           text: 'Vers Internet',
           handler: () => {
             this.isSync = true;
-            this.checkNetwork().then(isConnected => {
+            // this.checkNetwork().then(isConnected => {
               let toast;
-              if (isConnected) {
+              // if (isConnected) {
                 this.firebase.sync(this.initializedContacts).then(() => {
                   toast = this.toastCtrl.create({
                     message: "Synchronisation terminée !",
@@ -252,15 +273,15 @@ export class HomePage {
                   toast.present();
                   this.isSync = false;
                 });
-              } else {
-                toast = this.toastCtrl.create({
-                  message: "Vous devez être connecté pour synchroniser !",
-                  duration: 1500,
-                });
-                this.isSync = false;
-                toast.present();
-              }
-            });
+              // } else {
+              //   toast = this.toastCtrl.create({
+              //     message: "Vous devez être connecté pour synchroniser !",
+              //     duration: 1500,
+              //   });
+              //   this.isSync = false;
+              //   toast.present();
+              // }
+            // });
           }
         }
       ]
