@@ -27,6 +27,7 @@ export class LocalStorageProvider {
   public addValue(contact): Promise<boolean> {
     contact.id = this.COUNTER_ID++;
     this.contacts.push(contact);
+    console.log("ENTER ADD CONTACT");
     return this.storage.set('contacts', this.contacts).then(isSuccess => {
       console.log(`isSuccess `, isSuccess);
       this.storage.set('count_id', this.COUNTER_ID);
