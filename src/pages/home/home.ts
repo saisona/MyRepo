@@ -221,15 +221,20 @@ export class HomePage {
           handler: () => {
             this.isSync = true;
             this.firebase.getContacts().subscribe(contacts => {
-              this.contacts = contacts;
-              this.initializedContacts = contacts;
-              this.isSync = false;
+              this.contacts = this.contacts.concat(contacts);
+              this.initializedContacts = this.initializedContacts.concat(contacts);
+              this.contacts.sort(this.sort_function);
+              this.initializedContacts.sort(this.sort_function);
               let toast = this.toastCtrl.create({
-                message: "Synchronisation terminée !",
-                duration: 1500,
+                  message: "Synchronisation terminée !",
+                  duration: 1500,
               });
-              toast.present();
-            })
+              this.storageIonic.ready().then(storage => {
+                storage.setItem('contacts', this.initializedContacts);
+                toast.present();
+                this.isSync = false;
+              })
+            });
           }
         },
         {
@@ -287,6 +292,8 @@ export class HomePage {
   }
 
   private sort_function(c1,c2) {
+    console.log('c1 =>',c1);
+    console.log('c2 =>',c2);
     if(c1 !== null && c2 !== null)
       return c1._name.localeCompare(c2._name);
     else {
