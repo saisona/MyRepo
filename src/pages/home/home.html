@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>My Repo</ion-title>
+    <ion-title>Mon Repertoire</ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="sync()">
         <ion-icon *ngIf="!isSync" name="sync"></ion-icon>
@@ -22,7 +22,7 @@
     <ion-spinner></ion-spinner>
   </div>
   <ion-list no-lines>
-    <ion-item *ngIf="!contacts || contacts.length < 1">There is no DATA here !</ion-item>
+    <ion-item *ngIf="!contacts || contacts.length < 1">0 contact pour le moment !</ion-item>
     <ion-item-sliding *ngFor="let c of contacts ">
       <ion-item (click)="selectItem(c)">
         <h2>{{c._name}} {{c._fname}}</h2>
