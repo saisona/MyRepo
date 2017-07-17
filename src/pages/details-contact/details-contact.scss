@@ -1,3 +1,18 @@
 page-details-contact {
+	ion-card ion-list p{
+		word-wrap: break-word;
+		border:solid red 1px;
+	}
 
+	ion-card { 
+		width: auto;
+		height: auto;
+		word-wrap: break-word;
+	}
+	
+	ion-card ion-list { 
+		width: auto;
+		height: auto;
+		word-wrap: break-word;
+	}
 }

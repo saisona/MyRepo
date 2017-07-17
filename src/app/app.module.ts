@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
+import { IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { IonicStorageModule } from '@ionic/storage';
@@ -13,11 +13,11 @@ import {DetailsContactPage} from '../pages/details-contact/details-contact';
 // Import the AF2 Module
 import { AngularFireModule } from 'angularfire2';
 import { FirebaseProvider } from '../providers/firebase/firebase';
-import {AngularFireAuth} from "angularfire2/auth";
-import {AngularFireDatabase} from "angularfire2/database";
-import {ContactComponent} from '../components/contact/contact';
-import { FilterPipe } from '../pipes/filter/filter';
+import { AngularFireAuth} from "angularfire2/auth";
+import { AngularFireDatabase} from "angularfire2/database";
+import { ContactComponent} from '../components/contact/contact';
 import { LocalStorageProvider } from '../providers/local-storage/local-storage';
+import { ElasticDirective } from '../directives/elastic/elastic';
 
 // AF2 Settings
 export const firebaseConfig = {
@@ -36,7 +36,7 @@ export const firebaseConfig = {
     AddContactPage,
     ContactComponent,
     DetailsContactPage,
-    FilterPipe
+    ElasticDirective
   ],
   imports: [
     BrowserModule,

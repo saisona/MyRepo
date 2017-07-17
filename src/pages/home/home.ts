@@ -14,7 +14,7 @@ declare const Connection: any;
 
 @Component({
   selector: 'page-home',
-  templateUrl: 'home.html'
+  templateUrl: 'home.html',
 })
 export class HomePage {
 
@@ -217,49 +217,8 @@ export class HomePage {
       message: 'Quel mode de Synchronisation ?',
       buttons: [
         {
-          text: 'Mettre a jour via Internet',
-          handler: () => {
-            this.isSync = true;
-            this.firebase.getContacts().subscribe(contacts => {
-              this.contacts = this.contacts.concat(contacts);
-              this.initializedContacts = this.initializedContacts.concat(contacts);
-              this.contacts.sort(this.sort_function);
-              this.initializedContacts.sort(this.sort_function);
-              let toast = this.toastCtrl.create({
-                  message: "Synchronisation terminée !",
-                  duration: 1500,
-              });
-              this.storageIonic.ready().then(storage => {
-                storage.setItem('contacts', this.initializedContacts);
-                toast.present();
-                this.isSync = false;
-              })
-            });
-          }
-        },
-         {
-          text: 'Reboot par Internet',
-          handler: () => {
-            this.isSync = true;
-            this.firebase.getContacts().subscribe(contacts => {
-              this.contacts = contacts;
-              this.initializedContacts = contacts;
-              this.contacts.sort(this.sort_function);
-              this.initializedContacts.sort(this.sort_function);
-              let toast = this.toastCtrl.create({
-                  message: "Synchronisation terminée !",
-                  duration: 1500,
-              });
-              this.storageIonic.ready().then(storage => {
-                storage.setItem('contacts', this.initializedContacts);
-                toast.present();
-                this.isSync = false;
-              })
-            });
-          }
-        },
-        {
-          text: 'Vers Internet',
+          text: 'Exporter',
+          cssClass : 'success',
           handler: () => {
             this.isSync = true;
             // this.checkNetwork().then(isConnected => {
@@ -282,6 +241,28 @@ export class HomePage {
               //   toast.present();
               // }
             // });
+          }
+        },
+        {
+          text: 'Importer',
+          cssClass : 'danger',
+          handler: () => {
+            this.isSync = true;
+            this.firebase.getContacts().subscribe(contacts => {
+              this.contacts = contacts;
+              this.initializedContacts = contacts;
+              this.contacts.sort(this.sort_function);
+              this.initializedContacts.sort(this.sort_function);
+              let toast = this.toastCtrl.create({
+                  message: "Synchronisation terminée !",
+                  duration: 1500,
+              });
+              this.storageIonic.ready().then(storage => {
+                storage.setItem('contacts', this.initializedContacts);
+                toast.present();
+                this.isSync = false;
+              })
+            });
           }
         }
       ]
