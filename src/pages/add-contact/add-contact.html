@@ -31,7 +31,7 @@
 
     <ion-item>
       <ion-label stacked>Rue</ion-label>
-      <ion-input type="text" [(ngModel)]="_user['address']['street']"></ion-input>
+      <ion-textarea elastic [(ngModel)]="_user['address']['street']"></ion-textarea>
     </ion-item>
 
     <ion-item>
@@ -46,10 +46,6 @@
 
     <ion-item>
       <ion-label stacked>Notes</ion-label>
-      <!-- <textarea [(ngModel)]="_user['notes']"></textarea> -->
-      <!-- <ion-input type="text" [(ngModel)]="_user['notes']"></ion-input> -->
-      <!-- <elastic-textarea></elastic-textarea> -->
-       <!-- <ion-textarea #ionTxtArea [[(ngModel)]="_user['notes']" (ngModelChange)='onChange($event)'></ion-textarea> -->
       <ion-textarea elastic [(ngModel)]="_user['notes']"></ion-textarea>
     </ion-item>
 
