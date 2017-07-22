@@ -24,7 +24,7 @@ export class FirebaseProvider {
   public getContacts(): FirebaseListObservable<any> {
     return this.angDatabase.list('contacts', {
       query: {
-        orderByChild: 'name'
+        orderByChild: '_name'
       }
     });
   }
