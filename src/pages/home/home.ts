@@ -180,32 +180,32 @@ export class HomePage {
           $key: contact.$key || null,
           _notes: contact.notes
         };
-        // this.storageIonic.ready().then(storage => {
-        //     storage.getItem('contacts').then((contacts : ContactComponent[]) => {
+        this.storageIonic.ready().then(storage => {
+            storage.getItem('contacts').then((contacts : ContactComponent[]) => {
                 
-        //       if(index_found_contact_in_list !== -1)
-        //         contacts[index_found_contact_in_list] = contact;
-        //       else
-        //         console.log("Index to update is not defined => CONTACT NOT FOUND !");
-        //       contacts.sort(this.sort_function);
-        //       storage.setItem('contacts', contacts);
-        //       this.contacts = contacts;
-        //       this.initializedContacts = contacts;
-        //   });
-        // });
-        console.log("Contact to update => ", contact);
-        ContactComponent.update(contact, this.firebase).then(() => {
-          let toast = this.toastCtrl.create({
-            message: "Le contact a été modifié",
-            duration: 1500,
-            showCloseButton: true,
-            closeButtonText: 'Ok'
+              if(index_found_contact_in_list !== -1)
+                contacts[index_found_contact_in_list] = contact;
+              else
+                console.log("Index to update is not defined => CONTACT NOT FOUND !");
+              contacts.sort(this.sort_function);
+              storage.setItem('contacts', contacts);
+              this.contacts = contacts;
+              this.initializedContacts = contacts;
           });
-          toast.present();
-        }).catch(err => {
-          console.log(err);
-          alert("There was an ERROR !");
         });
+        // console.log("Contact to update => ", contact);
+        // ContactComponent.update(contact, this.firebase).then(() => {
+        //   let toast = this.toastCtrl.create({
+        //     message: "Le contact a été modifié",
+        //     duration: 1500,
+        //     showCloseButton: true,
+        //     closeButtonText: 'Ok'
+        //   });
+        //   toast.present();
+        // }).catch(err => {
+        //   console.log(err);
+        //   alert("There was an ERROR !");
+        // });
     });     
     modal.present();
   }
@@ -221,9 +221,9 @@ export class HomePage {
           cssClass : 'success',
           handler: () => {
             this.isSync = true;
-            // this.checkNetwork().then(isConnected => {
+            this.checkNetwork().then(isConnected => {
               let toast;
-              // if (isConnected) {
+              if (isConnected) {
                 this.firebase.sync(this.initializedContacts).then(() => {
                   toast = this.toastCtrl.create({
                     message: "Synchronisation terminée !",
@@ -232,15 +232,15 @@ export class HomePage {
                   toast.present();
                   this.isSync = false;
                 });
-              // } else {
-              //   toast = this.toastCtrl.create({
-              //     message: "Vous devez être connecté pour synchroniser !",
-              //     duration: 1500,
-              //   });
-              //   this.isSync = false;
-              //   toast.present();
-              // }
-            // });
+              } else {
+                toast = this.toastCtrl.create({
+                  message: "Vous devez être connecté pour synchroniser !",
+                  duration: 1500,
+                });
+                this.isSync = false;
+                toast.present();
+              }
+            });
           }
         },
         {
@@ -257,11 +257,11 @@ export class HomePage {
                   message: "Synchronisation terminée !",
                   duration: 1500,
               });
-              // this.storageIonic.ready().then(storage => {
-              //   storage.setItem('contacts', this.initializedContacts);
-              //   toast.present();
-              //   this.isSync = false;
-              // })
+              this.storageIonic.ready().then(storage => {
+                storage.setItem('contacts', this.initializedContacts);
+                toast.present();
+                this.isSync = false;
+              })
             });
           }
         }
