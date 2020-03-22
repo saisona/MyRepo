@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import 'rxjs/operator/toPromise';
-import {Storage} from "@ionic/storage";
-import {ContactComponent} from "../../components/contact/contact";
+import { Storage } from "@ionic/storage";
+import { ContactComponent } from "../../components/contact/contact";
 
 /*
  Generated class for the LocalStorageProvider provider.
@@ -37,8 +37,8 @@ export class LocalStorageProvider {
   }
 
   public getContacts(): Promise<any> {
-    return this.storage.get('contacts').then((res:ContactComponent[]) => {
-      console.log("IN PROVIDER => ",res);
+    return this.storage.get('contacts').then((res: ContactComponent[]) => {
+      console.log("IN PROVIDER => ", res);
       return res;
     });
   }

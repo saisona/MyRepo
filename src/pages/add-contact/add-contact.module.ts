@@ -13,4 +13,4 @@ import { AddContactPage } from './add-contact';
     AddContactPage
   ]
 })
-export class AddContactPageModule {}
+export class AddContactPageModule { }

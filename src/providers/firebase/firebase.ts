@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
-import {AngularFireDatabase, FirebaseListObservable} from "angularfire2/database";
-import {Thenable} from "firebase/app";
+import { AngularFireDatabase, FirebaseListObservable } from "angularfire2/database";
+import * as firebase from "firebase";
 
 /*
  Generated class for the FirebaseProvider provider.
@@ -17,7 +17,7 @@ export class FirebaseProvider {
     console.log('Hello FirebaseProvider Provider');
   }
 
-  public addContact(c: object): Thenable<any> {
+  public addContact(c: object): firebase.database.ThenableReference {
     return this.angDatabase.list('contacts').push(c);
   }
 
@@ -29,7 +29,7 @@ export class FirebaseProvider {
     });
   }
 
-  public sync(local:any[]) : Promise<any> {
+  public sync(local: any[]): Promise<any> {
     return new Promise((resolve, reject) => {
       this.angDatabase.list('contacts').remove().then(res => {
         local.forEach(item => {
@@ -42,11 +42,11 @@ export class FirebaseProvider {
     })
   }
 
-  public deleteContact(id: object): Thenable<any> {
+  public deleteContact(id: object): firebase.database.ThenableReference {
     return this.angDatabase.object('contacts/' + id).remove();
   }
 
-  public updateContact(id: string, contact: object): Thenable<any> {
+  public updateContact(id: string, contact: object): firebase.database.ThenableReference {
     return this.angDatabase.object('contacts/' + id).update(contact);
   }
 
