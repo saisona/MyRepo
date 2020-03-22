@@ -1,7 +1,7 @@
-import {Component} from '@angular/core';
-import {FirebaseProvider} from "../../providers/firebase/firebase";
-import {Address} from '../../Address';
-import {Thenable} from "firebase/app";
+import { Component } from '@angular/core';
+import { FirebaseProvider } from "../../providers/firebase/firebase";
+import { Address } from '../../Address';
+import * as firebase from "firebase";
 
 /**
  * Generated class for the ContactComponent component.
@@ -64,9 +64,9 @@ export class ContactComponent {
 
   /**
    * Function used to save the Contact onto the FirebaseDatabse
-   * @returns {Thenable<any>} return a Promise that will tell if fails or not !
+   * @returns {firebase.database.ThenableReference} return a Promise that will tell if fails or not !
    */
-  public save(): Thenable<any> {
+  public save(): firebase.database.ThenableReference {
     let contact_to_save: object = {};
     contact_to_save['_name'] = this._name;
     contact_to_save['_fname'] = this._fname;
@@ -79,15 +79,15 @@ export class ContactComponent {
   /**
    * Function used to update an existing contact
    * @param {ContactComponent} c the Contact to update
-   * @returns {Thenable<any>}
+   * @returns {firebase.database.ThenableReference}
    */
-  static update(c : any, firebase : FirebaseProvider) : Thenable<any> {
+  static update(c: any, firebase: FirebaseProvider): firebase.database.ThenableReference {
     let contact_to_update: object = {};
     contact_to_update['_name'] = c._name;
     contact_to_update['_fname'] = c._fname;
     contact_to_update['_address'] = c._address;
     contact_to_update['_notes'] = c._notes;
-    return firebase.updateContact(c.$key,contact_to_update);
+    return firebase.updateContact(c.$key, contact_to_update);
   }
 
   get notes(): string {
@@ -98,7 +98,7 @@ export class ContactComponent {
     return new ContactComponent('', '', new Address('', '', ''), '', null);
   }
 
-  public equals(contact : ContactComponent) : boolean {
+  public equals(contact: ContactComponent): boolean {
     return this._name == contact._name && this._fname == contact._name && this._address.equals(contact._address) && this._notes == contact._notes;
   }
 }

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import {IonicPage, ViewController,NavParams} from 'ionic-angular';
-import {ContactComponent} from "../../components/contact/contact";
+import { IonicPage, ViewController, NavParams } from 'ionic-angular';
+import { ContactComponent } from "../../components/contact/contact";
 
 /**
  * Generated class for the DetailsContactPage page.
@@ -15,9 +15,9 @@ import {ContactComponent} from "../../components/contact/contact";
 })
 export class DetailsContactPage {
 
-  protected _user : ContactComponent;
+  protected _user: ContactComponent;
 
-  constructor(public viewCtrl : ViewController,params: NavParams) {
+  constructor(public viewCtrl: ViewController, params: NavParams) {
     console.log(params.get('contact'));
     this._user = params.get('contact');
   }
@@ -26,8 +26,8 @@ export class DetailsContactPage {
     console.log('ionViewDidLoad DetailsContactPage');
   }
 
-  public close() : void {
-      this.viewCtrl.dismiss(null);
+  public close(): void {
+    this.viewCtrl.dismiss(null);
   }
 
 }
